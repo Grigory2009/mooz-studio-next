@@ -606,29 +606,29 @@ btnStreamStart.addEventListener('click', async () => {
   btnStreamStart.style.display = 'none';
   btnStreamPause.style.display = 'flex';
   btnStreamStop.style.display = 'flex';
-  badgeStreamState.textContent = 'ПЕЧАТЬ';
-  badgeStreamState.style.background = 'rgba(249, 115, 22, 0.2)';
-  badgeStreamState.style.color = '#fb923c';
+  badgeStreamState.textContent = 'Печать';
+  badgeStreamState.className = 'status-tag active';
 
   await comm.streamGcode(currentGcode);
 
   btnStreamStart.style.display = 'flex';
   btnStreamPause.style.display = 'none';
   btnStreamStop.style.display = 'none';
-  badgeStreamState.textContent = 'ГОТОВ';
-  badgeStreamState.style.background = 'rgba(148, 163, 184, 0.1)';
-  badgeStreamState.style.color = '#cbd5e1';
+  badgeStreamState.textContent = 'Готов';
+  badgeStreamState.className = 'status-tag';
 });
 
 btnStreamPause.addEventListener('click', async () => {
   if (comm.streamPaused) {
     await comm.resumeStream();
     btnStreamPause.innerHTML = `<span data-icon="pause" data-icon-size="14"></span>`;
-    badgeStreamState.textContent = 'ПЕЧАТЬ';
+    badgeStreamState.textContent = 'Печать';
+    badgeStreamState.className = 'status-tag active';
   } else {
     await comm.pauseStream();
     btnStreamPause.innerHTML = `<span data-icon="play" data-icon-size="14"></span>`;
-    badgeStreamState.textContent = 'ПАУЗА';
+    badgeStreamState.textContent = 'Пауза';
+    badgeStreamState.className = 'status-tag paused';
   }
   renderIcons(btnStreamPause);
 });
@@ -638,8 +638,8 @@ btnStreamStop.addEventListener('click', async () => {
   btnStreamStart.style.display = 'flex';
   btnStreamPause.style.display = 'none';
   btnStreamStop.style.display = 'none';
-  badgeStreamState.textContent = 'СТОП';
-  badgeStreamState.style.color = '#ef4444';
+  badgeStreamState.textContent = 'Остановлен';
+  badgeStreamState.className = 'status-tag stopped';
 });
 
 comm.onProgressUpdate = (prog) => {

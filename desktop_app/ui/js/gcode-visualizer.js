@@ -261,8 +261,8 @@ export class GcodeVisualizer {
     const h = this.canvas.height;
     if (!w || !h) return;
 
-    // Deep dark background
-    ctx.fillStyle = '#090d16';
+    // Graphite bed canvas background
+    ctx.fillStyle = '#141415';
     ctx.fillRect(0, 0, w, h);
 
     // Draw Machine Bed
@@ -280,20 +280,20 @@ export class GcodeVisualizer {
       ctx.lineTo(p2.x, p2.y);
 
       if (seg.type === 'travel') {
-        ctx.strokeStyle = 'rgba(100, 116, 139, 0.35)'; // Slate faint dashed
+        ctx.strokeStyle = 'rgba(133, 133, 139, 0.35)'; // Steel travel faint dashed
         ctx.lineWidth = Math.max(1, 0.8 * (this.scale / 2));
         ctx.setLineDash([4, 4]);
       } else {
         ctx.setLineDash([]);
         if (seg.to.z < 0) {
-          // CNC Carving: depth colored gradient (light cyan to deep blue)
+          // CNC Carving: depth colored gradient (ember to deep bronze)
           const depthRatio = Math.min(1, Math.abs(seg.to.z) / Math.max(1, Math.abs(this.bounds.minZ)));
-          const hue = 190 + depthRatio * 40; // 190 to 230
-          const light = 65 - depthRatio * 25;
-          ctx.strokeStyle = `hsl(${hue}, 90%, ${light}%)`;
-          ctx.lineWidth = Math.max(1.2, 1.5 * (this.scale / 2));
+          const hue = 25 + depthRatio * 15; // 25 (ember) to 40
+          const light = 60 - depthRatio * 20;
+          ctx.strokeStyle = `hsl(${hue}, 85%, ${light}%)`;
+          ctx.lineWidth = Math.max(1.2, 1.4 * (this.scale / 2));
         } else {
-          // Laser: power color (orange to fiery amber)
+          // Laser: power color (ember accent)
           const p = seg.power > 0 ? seg.power / 255 : 0.8;
           ctx.strokeStyle = `rgba(249, 115, 22, ${Math.max(0.4, p)})`;
           ctx.lineWidth = Math.max(1, 1.2 * (this.scale / 2));
@@ -310,11 +310,11 @@ export class GcodeVisualizer {
       
       // Cursor ring
       ctx.beginPath();
-      ctx.arc(curPos.x, curPos.y, 6, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(239, 68, 68, 0.3)';
+      ctx.arc(curPos.x, curPos.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(249, 115, 22, 0.35)';
       ctx.fill();
-      ctx.lineWidth = 1.5;
-      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = '#ededed';
       ctx.stroke();
 
       ctx.beginPath();
@@ -326,11 +326,11 @@ export class GcodeVisualizer {
     // Draw Origin (0,0,0)
     const origin = this._toScreen(0, 0, 0);
     ctx.beginPath();
-    ctx.arc(origin.x, origin.y, 4, 0, Math.PI * 2);
-    ctx.strokeStyle = '#22c55e';
-    ctx.lineWidth = 2;
+    ctx.arc(origin.x, origin.y, 3.5, 0, Math.PI * 2);
+    ctx.strokeStyle = '#4cc38a';
+    ctx.lineWidth = 1.5;
     ctx.stroke();
-    ctx.fillStyle = '#22c55e';
+    ctx.fillStyle = '#4cc38a';
     ctx.fill();
 
     // Axis indicator
@@ -348,14 +348,14 @@ export class GcodeVisualizer {
 
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#0f172a';
+        ctx.fillStyle = '#19191b';
         ctx.fill();
-        ctx.strokeStyle = '#334155';
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(237, 237, 237, 0.12)';
+        ctx.lineWidth = 1;
         ctx.stroke();
 
         // Rings every 10mm
-        ctx.strokeStyle = '#1e293b';
+        ctx.strokeStyle = 'rgba(237, 237, 237, 0.04)';
         ctx.lineWidth = 0.5;
         for (let r = 10; r < this.bed.width / 2; r += 10) {
           ctx.beginPath();
@@ -368,15 +368,15 @@ export class GcodeVisualizer {
         const w = this.bed.width * this.scale;
         const h = this.bed.depth * this.scale;
 
-        ctx.fillStyle = '#0f172a';
+        ctx.fillStyle = '#19191b';
         ctx.fillRect(p0.x, p0.y, w, h);
-        ctx.strokeStyle = '#334155';
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(237, 237, 237, 0.12)';
+        ctx.lineWidth = 1;
         ctx.strokeRect(p0.x, p0.y, w, h);
 
         // Grid lines (10mm intervals)
-        ctx.strokeStyle = '#1e293b';
-        ctx.lineWidth = 0.6;
+        ctx.strokeStyle = 'rgba(237, 237, 237, 0.04)';
+        ctx.lineWidth = 0.5;
         for (let x = 10; x < this.bed.width; x += 10) {
           const start = this._toScreen(x, 0);
           const end = this._toScreen(x, this.bed.depth);
@@ -407,15 +407,15 @@ export class GcodeVisualizer {
       ctx.lineTo(p11.x, p11.y);
       ctx.lineTo(p01.x, p01.y);
       ctx.closePath();
-      ctx.fillStyle = '#0f172a';
+      ctx.fillStyle = '#19191b';
       ctx.fill();
-      ctx.strokeStyle = '#334155';
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(237, 237, 237, 0.12)';
+      ctx.lineWidth = 1;
       ctx.stroke();
 
       // 3D Grid lines
-      ctx.strokeStyle = '#1e293b';
-      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = 'rgba(237, 237, 237, 0.04)';
+      ctx.lineWidth = 0.5;
       for (let x = 10; x < this.bed.width; x += 10) {
         const start = this._toScreen(x, 0, 0);
         const end = this._toScreen(x, this.bed.depth, 0);
@@ -439,32 +439,32 @@ export class GcodeVisualizer {
     const origin = this._toScreen(0, 0, 0);
     const len = 24;
 
-    // X Axis (Red)
+    // X Axis
     const xEnd = this._toScreen(len / this.scale, 0, 0);
     ctx.beginPath();
     ctx.moveTo(origin.x, origin.y);
     ctx.lineTo(xEnd.x, xEnd.y);
-    ctx.strokeStyle = '#ef4444';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#e5484d';
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Y Axis (Green)
+    // Y Axis
     const yEnd = this._toScreen(0, len / this.scale, 0);
     ctx.beginPath();
     ctx.moveTo(origin.x, origin.y);
     ctx.lineTo(yEnd.x, yEnd.y);
-    ctx.strokeStyle = '#22c55e';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#4cc38a';
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Z Axis (Blue in 3D mode)
+    // Z Axis (in 3D mode)
     if (this.viewMode === '3d') {
       const zEnd = this._toScreen(0, 0, len / this.scale);
       ctx.beginPath();
       ctx.moveTo(origin.x, origin.y);
       ctx.lineTo(zEnd.x, zEnd.y);
-      ctx.strokeStyle = '#3b82f6';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#85858b';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
     }
   }

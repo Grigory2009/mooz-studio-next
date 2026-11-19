@@ -72,11 +72,11 @@
    ```
 
 ### Сборка автономного исполняемого файла (.exe):
-Для компиляции в переносимый Windows `.exe`:
+Для компиляции в единый переносимый Windows `.exe` (не требующий Python и сторонних библиотек):
 ```bash
-pyinstaller desktop_app/mooz_studio_next.spec
+pyinstaller "desktop_app/MOOZ Studio Next.spec"
 ```
-Готовый бинарный файл будет находиться в директории `dist/MOOZ Studio Next/`.
+Готовый монолитный бинарный файл создается в директории `dist/MOOZ Studio Next.exe`.
 
 ---
 
